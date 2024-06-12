@@ -1,9 +1,7 @@
+import './index.css'
+
 function App() {
-  return (
-    <>
-      <div className="m-5 p-0"></div>
-    </>
-  )
+  return <h1 className="text-3xl text-amber-500"> Hello world! </h1>
 }
 
 export default App
