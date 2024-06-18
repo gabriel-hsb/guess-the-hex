@@ -2,38 +2,42 @@ import { useEffect, useRef, useState } from 'react'
 
 import Button from '@/components/ui/button'
 
-const GameSection = () => {
+const GameSection = ({ setKey }) => {
   const [correctAnswer, setCorrectAnswer] = useState('')
   const [isAnswerRight, setIsAnswerRight] = useState(null)
-  const [hasGameStarted, setHasGameStarted] = useState(false)
+  const [gameStarted, setGameStarted] = useState(false)
+
   const coloredDiv = useRef()
 
+  const [buttonColors, setButtonColors] = useState(
+    Array.from({ length: 3 }, randomHexColor),
+  )
+
   useEffect(() => {
-    setCorrectAnswer(randomRgb)
-
+    setCorrectAnswer(randomHexColor)
     coloredDiv.current.style.backgroundColor = randomRgb
-  }, [])
 
-  function rgbToHex(rgb) {
-    if (typeof rgb !== 'string') throw new Error('Apenas strings são aceitas')
-    const values = rgb.match(/\d+/g).map(Number)
-    return (
-      '#' +
-      values
-        .map((value) => {
-          const hex = value.toString(16)
-          return hex.length === 1 ? '0' + hex : hex
-        })
-        .join('')
-    ).toUpperCase()
-  }
+    // changeSecondButtonColor(correctAnswer)
+  }, [correctAnswer])
 
-  function randomNumberStr() {
-    return String((Math.random() * 255).toFixed())
-  }
+  // const rgbToHex = (rgb) => {
+  //   if (typeof rgb !== 'string') throw new Error('Apenas strings são aceitas')
+  //   const values = rgb.match(/\d+/g).map(Number)
+  //   return (
+  //     '#' +
+  //     values
+  //       .map((value) => {
+  //         const hex = value.toString(16)
+  //         return hex.length === 1 ? '0' + hex : hex
+  //       })
+  //       .join('')
+  //   ).toUpperCase()
+  // }
 
-  function randomRgb() {
+  const randomRgb = () => {
+    const randomNumberStr = String((Math.random() * 255).toFixed())
     let arr = []
+
     for (let i = 0; i < 3; i++) {
       arr = [...arr, randomNumberStr()]
     }
@@ -41,16 +45,46 @@ const GameSection = () => {
     return `rgb(${values})`
   }
 
-  function checkAnswer({ target }) {
-    setHasGameStarted(true)
-    const guessedColor = target.attributes[1].value
-    console.log(guessedColor)
+  function randomHexColor() {
+    const randomColor = Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .toUpperCase()
+      .padStart(6, '0')
+    return `#${randomColor}`
+  }
+
+  const checkAnswer = ({ target }) => {
+    if (!gameStarted) setGameStarted(true)
+    const guessedColor = target.innerText
 
     if (guessedColor === correctAnswer) {
       setIsAnswerRight(true)
+
+      // reloads component
+      setTimeout(() => {
+        setKey((prevKey) => prevKey + 1)
+        setButtonColors(Array.from({ length: 3 }, randomHexColor)) // Atualiza as cores dos botões
+      }, 1000)
     } else {
-      target.disabled = true
       setIsAnswerRight(false)
+      target.disabled = true
+    }
+  }
+
+  const shuffle = (array) => {
+    let currentIndex = array.length
+
+    // While there remain elements to shuffle...
+    while (currentIndex !== 0) {
+      // Pick a remaining element...
+      const randomIndex = Math.floor(Math.random() * currentIndex)
+      currentIndex--
+
+      // And swap it with the current element.
+      ;[array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ]
     }
   }
 
@@ -61,25 +95,18 @@ const GameSection = () => {
         style={{ backgroundColor: correctAnswer }}
         className="size-72"
       />
-      {correctAnswer && (
-        <div className="mt-3 flex justify-center gap-3">
-          {/* TODO: qual/como comparar valor correto do guessed */}
-          <Button onClick={checkAnswer} guess={correctAnswer}>
-            {rgbToHex(correctAnswer)}
-          </Button>
-          <Button onClick={checkAnswer} guess="cccccc">
-            #cccccc
-          </Button>
-          <Button onClick={checkAnswer} guess="cccccc">
-            #ccafcc
-          </Button>
-        </div>
-      )}
 
-      {hasGameStarted && (
+      <div className="mt-3 flex justify-center gap-3">
+        {buttonColors.map((color, index) => (
+          <Button key={index} onClick={checkAnswer}>
+            {color}
+          </Button>
+        ))}
+      </div>
+
+      {gameStarted && (
         <span className="mt-3 block w-full text-center">
-          {' '}
-          {isAnswerRight ? 'Acertou' : 'Errou'}{' '}
+          {isAnswerRight ? 'Acertou' : 'Errou'}
         </span>
       )}
     </section>
