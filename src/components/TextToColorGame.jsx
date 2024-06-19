@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { GlobalContext } from '@/GlobalStorage'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import Button from '@/components/ui/button'
-import Slider from '@mui/material/Slider'
 
 const TextToColorGame = ({ setKey, buttonsQty }) => {
   const [correctAnswer, setCorrectAnswer] = useState('')
   const [isAnswerRight, setIsAnswerRight] = useState(null)
-  const [gameStarted, setGameStarted] = useState(false)
+  const [showFeedback, setShowFeedback] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [buttonColors, setButtonColors] = useState(
     Array.from({ length: buttonsQty }, randomHexColor),
@@ -15,10 +15,13 @@ const TextToColorGame = ({ setKey, buttonsQty }) => {
   const coloredDiv = useRef()
   const feedbackText = useRef()
 
+  const { gameStarted, setGameStarted } = useContext(GlobalContext)
+
   useEffect(() => {
+    setShowFeedback(false)
+
     const newCorrectAnswer = randomHexColor()
     setCorrectAnswer(newCorrectAnswer)
-
     coloredDiv.current.style.backgroundColor = correctAnswer
 
     let random = Math.random().toFixed() * buttonColors.length - 1
@@ -44,6 +47,7 @@ const TextToColorGame = ({ setKey, buttonsQty }) => {
   function checkAnswer({ target }) {
     if (!gameStarted) setGameStarted(true)
     const guessedColor = target.innerText
+    setShowFeedback(true)
 
     if (guessedColor === correctAnswer) {
       setIsAnswerRight(true)
@@ -60,12 +64,6 @@ const TextToColorGame = ({ setKey, buttonsQty }) => {
 
     if (feedbackText.current) feedbackText.current.style.color = guessedColor
   }
-
-  function valuetext(value) {
-    return `${value}°C`
-  }
-
-  console.log(valuetext())
 
   return (
     <section className="m-auto h-[calc(100vh-5rem)] max-w-2xl pt-28">
@@ -85,23 +83,13 @@ const TextToColorGame = ({ setKey, buttonsQty }) => {
         </div>
       </div>
 
-      <Slider
-        aria-label="Dificulty"
-        defaultValue={4}
-        getAriaValueText={valuetext}
-        valueLabelDisplay="auto"
-        shiftStep={1}
-        step={1}
-        marks
-        min={3}
-        max={20}
-      />
-
       <span
         ref={feedbackText}
         className="mt-3 block w-full text-center text-2xl"
       >
-        {gameStarted && (isAnswerRight ? 'Right Answer!' : 'Wrong Answer')}
+        {showFeedback &&
+          gameStarted &&
+          (isAnswerRight ? 'Right Answer!' : 'Wrong Answer')}
       </span>
     </section>
   )
