@@ -1,7 +1,7 @@
 const Button = ({ children, ...props }) => {
   return (
     <button
-      className="rounded-lg border-2 border-emerald-200 bg-slate-400 px-2 py-1 text-black disabled:bg-transparent"
+      className="rounded-lg bg-[#3c3f46] px-3 py-1 font-mono text-lg text-white disabled:bg-[#272728]"
       {...props}
     >
       {children}

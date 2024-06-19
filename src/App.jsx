@@ -18,7 +18,7 @@ function App() {
           <Route
             path="/"
             element={
-              <TextToColorGame key={key} setKey={setKey} buttonsQty={4} />
+              <TextToColorGame key={key} setKey={setKey} buttonsQty={8} />
             }
           />
           <Route path="*" element={NotFound} />
