@@ -1,9 +1,4 @@
-import { GlobalContext } from '@/GlobalStorage'
-import { useContext } from 'react'
-
 const Footer = () => {
-  const global = useContext(GlobalContext)
-
   return (
     <footer className="text-center">
       <p className="relative inline-block bg-gradient-to-r from-red-400 via-gray-300 to-blue-500 bg-clip-text py-3 font-kanit text-2xl text-transparent">
@@ -15,7 +10,6 @@ const Footer = () => {
           gabriel-hsb
         </a>
       </p>
-      {global.foo}
     </footer>
   )
 }

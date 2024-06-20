@@ -1,38 +1,37 @@
-import { useEffect, useState } from 'react'
+import { GlobalStorage } from '@/GlobalStorage'
+import { useState } from 'react'
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import { GlobalStorage } from '@/GlobalStorage'
-
 import Footer from '@/components/Footer'
+import GameOptions from '@/components/GameOptions'
 import Header from '@/components/Header'
 import NotFound from '@/components/NotFound'
 import TextToColorGame from '@/components/TextToColorGame'
-import GameOptions from './components/GameOptions'
 
 function App() {
   // to reset component
   const [key, setKey] = useState(0)
-  const [foo, setFoo] = useState(localStorage.getItem('difficulty'))
+  const [foo, setFoo] = useState(3)
 
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setFoo(localStorage.getItem('difficulty'))
-    }
+  const [gameStarted, setGameStarted] = useState(false)
 
-    window.addEventListener('storage', handleStorageChange)
+  // useEffect(() => {
+  //   const handleStorageChange = () => {
+  //     setFoo(localStorage.getItem('difficulty'))
+  //   }
 
-    return () => {
-      window.removeEventListener('storage', handleStorageChange)
-    }
-  }, [])
+  //   window.addEventListener('storage', handleStorageChange)
 
-  const updateFoo = (newFoo) => {
-    localStorage.setItem('difficulty', newFoo)
-    setFoo(newFoo)
-  }
+  //   return () => {
+  //     window.removeEventListener('storage', handleStorageChange)
+  //   }
+  // }, [])
 
-  console.log(foo)
+  // const updateFoo = (newFoo) => {
+  //   localStorage.setItem('difficulty', newFoo)
+  //   setFoo(newFoo)
+  // }
 
   return (
     <>
@@ -43,12 +42,25 @@ function App() {
             <Route
               path="/"
               element={
-                <TextToColorGame key={key} setKey={setKey} buttonsQty={foo} />
+                gameStarted ? (
+                  <TextToColorGame
+                    key={key}
+                    setKey={setKey}
+                    buttonsQty={foo}
+                    setGameStarted={setGameStarted}
+                    gameStarted={gameStarted}
+                  />
+                ) : (
+                  <GameOptions
+                    setFoo={setFoo}
+                    setGameStarted={setGameStarted}
+                    gameStarted={gameStarted}
+                  />
+                )
               }
             />
             <Route path="*" element={NotFound} />
           </Routes>
-          <GameOptions updateFoo={updateFoo} />
           <Footer />
         </BrowserRouter>
       </GlobalStorage>

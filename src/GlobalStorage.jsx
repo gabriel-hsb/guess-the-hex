@@ -1,13 +1,11 @@
-import { createContext, useState } from 'react'
+import { createContext } from 'react'
 
 export const GlobalContext = createContext()
 
 export const GlobalStorage = ({ children }) => {
-  const [gameStarted, setGameStarted] = useState(false)
+  const foo = 'foo'
 
   return (
-    <GlobalContext.Provider value={{ setGameStarted, gameStarted }}>
-      {children}
-    </GlobalContext.Provider>
+    <GlobalContext.Provider value={{ foo }}>{children}</GlobalContext.Provider>
   )
 }

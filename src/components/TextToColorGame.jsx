@@ -1,9 +1,15 @@
-import { GlobalContext } from '@/GlobalStorage'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+import { Tilt } from 'react-tilt'
 
 import Button from '@/components/ui/button'
 
-const TextToColorGame = ({ setKey, buttonsQty }) => {
+const TextToColorGame = ({
+  setKey,
+  buttonsQty,
+  setGameStarted,
+  gameStarted,
+}) => {
   const [correctAnswer, setCorrectAnswer] = useState('')
   const [isAnswerRight, setIsAnswerRight] = useState(null)
   const [showFeedback, setShowFeedback] = useState(false)
@@ -15,7 +21,16 @@ const TextToColorGame = ({ setKey, buttonsQty }) => {
   const coloredDiv = useRef()
   const feedbackText = useRef()
 
-  const { gameStarted, setGameStarted } = useContext(GlobalContext)
+  const defaultOptions = {
+    reverse: true, // reverse the tilt direction
+    max: 35, // max tilt rotation (degrees)
+    perspective: 1000, // Transform perspective, the lower the more extreme the tilt gets.
+    speed: 1000, // Speed of the enter/exit transition
+    transition: true, // Set a transition on enter/exit.
+    reset: true, // If the tilt effect has to be reset on exit.
+    easing: 'cubic-bezier(.03,.98,.52,.99)', // Easing on enter/exit.
+    scale: 1,
+  }
 
   useEffect(() => {
     setShowFeedback(false)
@@ -24,8 +39,7 @@ const TextToColorGame = ({ setKey, buttonsQty }) => {
     setCorrectAnswer(newCorrectAnswer)
     coloredDiv.current.style.backgroundColor = correctAnswer
 
-    let random = Math.random().toFixed() * buttonColors.length - 1
-    if (random <= 1) random = 1
+    const random = Math.floor(Math.random() * buttonsQty)
 
     setButtonColors((prevColors) => {
       const newColors = [...prevColors]
@@ -66,31 +80,44 @@ const TextToColorGame = ({ setKey, buttonsQty }) => {
   }
 
   return (
-    <section className="m-auto h-[calc(100vh-5rem)] max-w-2xl pt-28">
-      <div className="flex flex-col items-center justify-center gap-6">
-        <div
-          ref={coloredDiv}
-          style={{ backgroundColor: correctAnswer }}
-          className="size-48 rounded-full"
-        />
+    <section className="m-auto flex h-[calc(100vh-5rem)] max-w-2xl flex-col items-center pt-16">
+      <div className="pb-16">
+        <div className="flex flex-col items-center justify-center gap-6">
+          <Tilt options={defaultOptions}>
+            <div
+              ref={coloredDiv}
+              style={{ backgroundColor: correctAnswer }}
+              className="size-48 rounded-full"
+            />
+          </Tilt>
 
-        <div className="mt-3 flex flex-wrap justify-center gap-3">
-          {buttonColors.map((color, i) => (
-            <Button key={i} onClick={checkAnswer} disabled={isLoading}>
-              {color}
-            </Button>
-          ))}
+          <div className="mt-3 flex flex-wrap justify-center gap-3">
+            {buttonColors.map((color, i) => (
+              <Button key={i} onClick={checkAnswer} disabled={isLoading}>
+                {color}
+              </Button>
+            ))}
+          </div>
         </div>
+
+        <span
+          ref={feedbackText}
+          className="mt-3 block h-4 w-full text-center text-2xl"
+        >
+          {showFeedback &&
+            gameStarted &&
+            (isAnswerRight ? 'Right Answer!' : 'Wrong Answer')}
+        </span>
       </div>
 
-      <span
-        ref={feedbackText}
-        className="mt-3 block w-full text-center text-2xl"
+      <Button
+        className={
+          'bg-gradient-to-r from-yellow-200 via-pink-200 to-pink-400 text-black/80'
+        }
+        onClick={() => location.reload()}
       >
-        {showFeedback &&
-          gameStarted &&
-          (isAnswerRight ? 'Right Answer!' : 'Wrong Answer')}
-      </span>
+        Restart game
+      </Button>
     </section>
   )
 }

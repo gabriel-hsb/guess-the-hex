@@ -1,37 +1,34 @@
 import { Slider } from '@mui/material'
 
-import { useContext, useEffect } from 'react'
+import Button from '@/components/ui/button'
 
-import { GlobalContext } from '@/GlobalStorage'
-
-const GameOptions = ({ updateFoo }) => {
-  const { gameStarted } = useContext(GlobalContext)
-
+const GameOptions = ({ setFoo, setGameStarted }) => {
   function handleSlider(value) {
-    updateFoo(value)
+    setFoo(value)
   }
 
-  useEffect(() => {
-    localStorage.getItem('difficulty')
-  }, [])
-
   return (
-    <section className="w-full max-w-3xl">
-      <div>
-        Selecione a dificuldade:
+    <section className="m-auto h-[75dvh] w-full max-w-3xl pt-12 text-center text-xl text-amber-500">
+      Select the difficulty:
+      <div className="my-9">
         <Slider
           aria-label="Difficulty"
-          defaultValue={5}
           getAriaValueText={handleSlider}
           valueLabelDisplay="auto"
           shiftStep={1}
+          defaultValue={4}
           step={1}
           marks
           min={3}
-          max={20}
-          disabled={gameStarted}
+          max={15}
         />
       </div>
+      <Button
+        className="bg-gradient-to-r from-pink-400 to-pink-600"
+        onClick={() => setGameStarted(true)}
+      >
+        Start game
+      </Button>
     </section>
   )
 }
