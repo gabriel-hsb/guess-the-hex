@@ -12,7 +12,7 @@ import TextToColorGame from '@/components/TextToColorGame'
 function App() {
   // to reset component
   const [key, setKey] = useState(0)
-  const [foo, setFoo] = useState(3)
+  const [difficulty, setDifficulty] = useState(3)
 
   const [gameStarted, setGameStarted] = useState(false)
 
@@ -46,13 +46,14 @@ function App() {
                   <TextToColorGame
                     key={key}
                     setKey={setKey}
-                    buttonsQty={foo}
+                    buttonsQty={difficulty}
                     setGameStarted={setGameStarted}
                     gameStarted={gameStarted}
                   />
                 ) : (
                   <GameOptions
-                    setFoo={setFoo}
+                    setDifficulty={setDifficulty}
+                    difficulty={difficulty}
                     setGameStarted={setGameStarted}
                     gameStarted={gameStarted}
                   />

@@ -2,9 +2,14 @@ import { Slider } from '@mui/material'
 
 import Button from '@/components/ui/button'
 
-const GameOptions = ({ setFoo, setGameStarted }) => {
+const GameOptions = ({ setDifficulty, difficulty, setGameStarted }) => {
   function handleSlider(value) {
-    setFoo(value)
+    setDifficulty(value)
+  }
+
+  function handleClick() {
+    setGameStarted(true)
+    if (difficulty === 15) alert('Good luck!')
   }
 
   return (
@@ -25,7 +30,7 @@ const GameOptions = ({ setFoo, setGameStarted }) => {
       </div>
       <Button
         className="bg-gradient-to-r from-pink-400 to-pink-600"
-        onClick={() => setGameStarted(true)}
+        onClick={handleClick}
       >
         Start game
       </Button>

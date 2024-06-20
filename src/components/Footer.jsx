@@ -5,6 +5,7 @@ const Footer = () => {
         Made by{' '}
         <a
           href="http://github.com/gabriel-hsb"
+          target="_blank"
           className="after:absolute after:right-0 after:top-11 after:ml-0.5 after:inline-block after:h-[3px] after:w-[126px] after:bg-gradient-to-r after:from-green-200 after:via-green-400 after:to-purple-700 after:content-['']"
         >
           gabriel-hsb
