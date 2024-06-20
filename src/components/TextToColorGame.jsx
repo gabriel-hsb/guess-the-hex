@@ -80,8 +80,8 @@ const TextToColorGame = ({
   }
 
   return (
-    <section className="m-auto flex h-[calc(100vh-5rem)] max-w-2xl flex-col items-center pt-16">
-      <div className="pb-16">
+    <section className="m-auto flex h-dvh max-w-2xl flex-col items-center pt-8 sm:h-[calc(100vh-5rem)] sm:pt-16">
+      <div className="pb-8 sm:pb-16">
         <div className="flex flex-col items-center justify-center gap-6">
           <Tilt options={defaultOptions}>
             <div

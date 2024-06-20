@@ -10,7 +10,7 @@ const GameOptions = ({ setFoo, setGameStarted }) => {
   return (
     <section className="m-auto h-[75dvh] w-full max-w-3xl pt-12 text-center text-xl text-amber-500">
       Select the difficulty:
-      <div className="my-9">
+      <div className="my-9 px-3">
         <Slider
           aria-label="Difficulty"
           getAriaValueText={handleSlider}
