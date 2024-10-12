@@ -18,20 +18,6 @@ const GameSection = ({ setKey }) => {
     coloredDiv.current.style.backgroundColor = randomRgb
   }, [correctAnswer])
 
-  // const rgbToHex = (rgb) => {
-  //   if (typeof rgb !== 'string') throw new Error('Apenas strings são aceitas')
-  //   const values = rgb.match(/\d+/g).map(Number)
-  //   return (
-  //     '#' +
-  //     values
-  //       .map((value) => {
-  //         const hex = value.toString(16)
-  //         return hex.length === 1 ? '0' + hex : hex
-  //       })
-  //       .join('')
-  //   ).toUpperCase()
-  // }
-
   const randomRgb = () => {
     const randomNumberStr = String((Math.random() * 255).toFixed())
     let arr = []
@@ -61,7 +47,7 @@ const GameSection = ({ setKey }) => {
       // reloads component
       setTimeout(() => {
         setKey((prevKey) => prevKey + 1)
-        setButtonColors(Array.from({ length: 3 }, randomHexColor)) // Atualiza as cores dos botões
+        setButtonColors(Array.from({ length: 3 }, randomHexColor)) // Update buttons colors when loading new game
       }, 1000)
     } else {
       setIsAnswerRight(false)
